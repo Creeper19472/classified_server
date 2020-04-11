@@ -75,7 +75,7 @@ class ConnectThread:
 
             except:
                 MakeMsg.Send(conn, cpkg.PackagesGenerator.InternalServerError())
-                multicol.Yellow("WARN") + "]" + "用户 undefined 秘钥错误 拒绝登录") 
+                print("[" + multicol.Yellow("WARN") + "] " + "用户 undefined 秘钥错误 拒绝登录") 
                 conn.close()
                 exit()
         else:
