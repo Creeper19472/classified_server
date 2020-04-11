@@ -12,8 +12,7 @@ sys.path.append("./functions/")
 
 import pkgGenerator as cpkg
 
-
-client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 class MakeMsg():
     def Recv(Limit):
@@ -37,9 +36,9 @@ class ClientConnection():
             MakeMsg.Send("Success")
         if MakeMsg.Recv(128) == "RequestAuthentication":
             ClientInfo = {
-                "Agreement" : "Classified_Agreement_0",
-                "ClientName" : "Client",
-                "ClientVer" : "0"
+                "Agreement": "Classified_Agreement_0",
+                "ClientName": "Client",
+                "ClientVer": "0"
                           }
             MakeMsg.Send(ClientInfo)
         TempMsg = MakeMsg.Recv(512)
@@ -73,8 +72,6 @@ class ClientConnection():
                 MakeMsg.Send(letscrypt.BLOWFISH.Encrypt('OK', KEY))'''
         return True
                 
-
-
     def DisConnect():
         try:
             MakeMsg.Send("disconnect")
@@ -86,7 +83,6 @@ class ClientConnection():
             client.close()
             sys.exit()
         return True
-
 
 cliinfo = ("127.0.0.1", 5104)
 
@@ -102,7 +98,6 @@ while True:
         break
     else:
         print('The server send back a ConnectionRefusedError. Re-trying now.')
-
 
 while True:
     cmd = input('$ ')
