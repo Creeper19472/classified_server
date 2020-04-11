@@ -47,7 +47,7 @@ class ClientConnection():
             if TempMsg['Code'] == '10':
                 print('The server needs an account and a password.')
                 account = input('Account: ')
-                password  = input('Password: ')
+                password = input('Password: ')
                 SHA256 = hashlib.sha256(password.encode()).hexdigest()
                 MakeMsg.Send(cpkg.PackagesGenerator.AuthPackage(account, SHA256))
                 TempMsg = MakeMsg.Recv(128)
