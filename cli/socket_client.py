@@ -19,7 +19,7 @@ class MakeMsg():
         Msg = client.recv(Limit)
         Msg = Msg.decode()
         return json.loads(Msg)
-    
+
     def Send(Msg):
         byte = bytes(json.dumps(Msg), encoding='UTF-8')
         client.send(byte)
@@ -71,7 +71,7 @@ class ClientConnection():
                 KEY = TempCryptMsg['KEY']
                 MakeMsg.Send(letscrypt.BLOWFISH.Encrypt('OK', KEY))'''
         return True
-                
+
     def DisConnect():
         try:
             MakeMsg.Send("disconnect")
