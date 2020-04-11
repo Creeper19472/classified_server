@@ -56,7 +56,7 @@ class ConnectThread:
                 sys.exit()
         if LoginAuth == 'True':
             MakeMsg.Send(conn, cpkg.PackagesGenerator.LoginRequired())
-            print("[" + multicol.Green("INFO") + "] " + "请求访问 要求登录")
+            print("[" + multicol.Green("INFO") + "] " + addr[0] + ": 访问阻断 要求登录")
             AuthInfo = MakeMsg.Recv(conn, 2048)
             try:
                 if AuthInfo['Code'] == '11':
@@ -70,10 +70,12 @@ class ConnectThread:
                                 raise ValueError('Password not match.')
                         except ValueError:
                             MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound('Login Failed'))
+                            print("[" + multicol.Yellow("WARN") + "]" + "用户 %s 秘钥错误 拒绝登录" % AuthInfo['Account'])
 
 
             except:
                 MakeMsg.Send(conn, cpkg.PackagesGenerator.InternalServerError())
+                multicol.Yellow("WARN") + "]" + "用户 undefined 秘钥错误 拒绝登录") 
                 conn.close()
                 exit()
         else:
