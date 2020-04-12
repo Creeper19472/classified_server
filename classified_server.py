@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "[1.3.1.057]"
+VERSION = "[1.3.1.083]"
 
 import sys, os, json, socket, shelve, rsa, configparser, time, random, threading, string
 
@@ -12,6 +12,7 @@ from Connect import ConnectThread
 import colset, letscrypt
 import pkgGenerator as cpkg
 
+
 class MakeMsg:
     def Recv(conn, Limit):
         Msg = conn.recv(Limit)
@@ -21,13 +22,15 @@ class MakeMsg:
         byte = bytes(json.dumps(Msg), encoding='UTF-8')
         conn.send(byte)
 
+
 class MakeMsg_ex:
     def Recv(conn, Limit):
         Msg = conn.recv(Limit)
         return Msg.decode()
-    
+
     def Send(conn, Msg):
         conn.send(Msg)
+
 
 class ConnectThread:
     def MainThread():
@@ -71,16 +74,16 @@ class ConnectThread:
                         except ValueError:
                             MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound('Login Failed'))
                             print("[" + multicol.Yellow("WARN") + "]" + "用户 %s 秘钥错误 拒绝登录" % AuthInfo['Account'])
-
-
+                            conn.close()
+                            sys.exit()
             except:
                 MakeMsg.Send(conn, cpkg.PackagesGenerator.InternalServerError())
                 print("[" + multicol.Yellow("WARN") + "] " + "用户 undefined 秘钥错误 拒绝登录") 
                 conn.close()
-                exit()
+                sys.exit()
         else:
             MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('None', 'None'))
-            
+
         while True: # 此处开始循环检测指令
             try:
                 TempMsg = MakeMsg.Recv(conn, 1024)
@@ -120,10 +123,10 @@ class ConnectThread:
                 except:
                     MakeMsg.Send(conn, cpkg.PackagesGenerator.InternalServerError())
                     continue
-            
 
             if TempMsg[0] == "VERSION":
                MakeMsg.Send(conn, VERSION)
+
 
 class MainThread(threading.Thread):
     def __init__(self, threadID, name, counter):
@@ -131,11 +134,13 @@ class MainThread(threading.Thread):
         self.threadID = threadID
         self.name = name
         self.counter = counter
+
     def run(self):
         ConnectThread.MainThread()
 
+
 server = socket.socket()
-    
+
 time1 = time.time()
 
 def title():
@@ -152,7 +157,7 @@ multicol = colset.Colset()
 if os.path.exists('_classified_initialized') == False:
     print("[" + multicol.Green("INFO") + "] " + 'The system is initializing, please wait ...')
     os.chdir('./secure')
-    Encrypt.CreateNewKey(2048)
+    letscrypt.RSA.CreateNewKey(2048)
     os.chdir('../')
     with open("_classified_initialized", "w") as x:
         x.write('\n')
@@ -205,10 +210,8 @@ print("[" + multicol.Green("INFO") + "] " + ("Done(%ss)!" % time2))
 with open("./secure/e.pem", "rb") as x:
     ekey = x.read()
 
-
 # salt = ''.join(random.sample(string.ascii_letters + string.digits, 8))
 # print(letscrypt.BLOWFISH.Encrypt('aaaaaaa', salt))
-
 
 while True:
     if EnablePlugins == True:
