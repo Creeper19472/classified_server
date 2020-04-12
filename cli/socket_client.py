@@ -14,6 +14,7 @@ import pkgGenerator as cpkg
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+
 class MakeMsg():
     def Recv(Limit):
         Msg = client.recv(Limit)
@@ -24,12 +25,12 @@ class MakeMsg():
         byte = bytes(json.dumps(Msg), encoding='UTF-8')
         client.send(byte)
 
+
 class ClientConnection():
     def MakeConnect():
         try:
             client.connect(cliinfo)
-        except ConnectionRefusedError as e:
-            print(e)
+        except ConnectionRefusedError:
             return False
         MakeMsg.Send("Hi")
         if MakeMsg.Recv(64) == "Hi":
@@ -39,7 +40,7 @@ class ClientConnection():
                 "Agreement": "Classified_Agreement_0",
                 "ClientName": "Client",
                 "ClientVer": "0"
-                          }
+            }
             MakeMsg.Send(ClientInfo)
         TempMsg = MakeMsg.Recv(512)
         print(TempMsg)
@@ -79,17 +80,18 @@ class ClientConnection():
                 client.close()
             else:
                 print("The server failed to respond to the client request normally, and the disconnection may be unilateral.")
-        except ConnectionResetError as e:
+        except ConnectionResetError:
             client.close()
             sys.exit()
         return True
+
 
 cliinfo = ("127.0.0.1", 5104)
 
 print('Connecting to the Server...')
 
 while True:
-    if ClientConnection.MakeConnect() == True:
+    if ClientConnection.MakeConnect() is True:
         print('Welcome to Classified FileSystem [Pre-release 0.0.3]')
         MakeMsg.Send('VERSION')
         print('You\'re viewing the server [None], Version %s.' % MakeMsg.Recv(64))
@@ -105,7 +107,7 @@ while True:
         MakeMsg.Send('GET ' + cmd)
         TempMsg = MakeMsg.Recv(1024)
         if TempMsg['Code'] != '200':
-            print('Code '+str(TempMsg['Code'])+':')
+            print('Code ' + str(TempMsg['Code']) + ':')
             print(TempMsg['Message'])
         else:
             print(TempMsg['Message'])
