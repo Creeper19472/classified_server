@@ -65,8 +65,7 @@ class ConnectThread:
                 if AuthInfo['Code'] == '11':
                     with shelve.open('./secure/users/users.db') as db:
                         try:
-                            if db[AuthInfo['Account']] == AuthInfo['Password']:
-                                canaccess = useraccess[AuthInfo['Account']]
+                            if AuthInfo['Password'] == db[AuthInfo['Account']]:
                                 MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('Login', 'success'))
                                 print("[" + multicol.Green("INFO") + "] " + "用户 %s 秘钥正确 准许登录" % AuthInfo['Account'])
                             else:
