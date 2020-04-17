@@ -66,6 +66,8 @@ class ConnectThread:
                     with shelve.open('./secure/users/users.db') as db:
                         try:
                             if AuthInfo['Password'] == db[AuthInfo['Account']]:
+                                with shelve.open('./files/access.db') as fac:
+                                    canaccess = fac[AuthInfo['Account']]
                                 MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('Login', 'success'))
                                 print("[" + multicol.Green("INFO") + "] " + "用户 %s 秘钥正确 准许登录" % AuthInfo['Account'])
                             else:
