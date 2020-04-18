@@ -1,7 +1,5 @@
 # -*- coding: UTF-8 -*-
 
-import string
-
 class PackagesGenerator:
     def FileNotFound(Msg):
         Package = {
