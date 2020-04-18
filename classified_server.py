@@ -8,7 +8,6 @@ sys.path.append("./functions/")
 
 sys.path.append("./functions/class")
 
-from Connect import ConnectThread
 import colset, letscrypt
 import pkgGenerator as cpkg
 
