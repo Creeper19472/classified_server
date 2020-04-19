@@ -11,6 +11,8 @@ sys.path.append("./functions/class")
 import colset, letscrypt
 import pkgGenerator as cpkg
 
+es = gettext.translation('cfs_server', localedir='locale', languages=['zh_CN'])
+es.install()
 
 class MakeMsg:
     def Recv(conn, Limit):
@@ -50,7 +52,7 @@ class ConnectThread:
                     if ForceAuthentication == "True":
                         print("[" + multicol.Yellow("WARN") + "] " + _("According to the security agreement, this connection has been forcibly terminated."))
                         conn.close()
-                        print("[" + multicol.Green("INFO") + "] " + "Client disconnect", addr, ": Forced disconnect")
+                        print("[" + multicol.Green("INFO") + "] " + _("Client disconnect %s: Forced disconnect") % addr)
                         sys.exit()
             else:
                 print("[" + multicol.Yellow("WARN") + "] " + "Exception: ", addr, "attempted to connect to the server using an invalid protocol.")
