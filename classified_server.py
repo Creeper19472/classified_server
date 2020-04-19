@@ -159,7 +159,10 @@ if os.path.exists('_classified_initialized') == False:
     os.chdir('./secure')
     letscrypt.RSA.CreateNewKey(2048)
     os.chdir('../')
+    __import__('shutil')
+    shutil.copyfile('./functions/class/template', './config/config.ini')
     print('欢迎使用Classified档案管理系统！请选择你要使用的语言：')
+    
     with open("_classified_initialized", "w") as x:
         x.write('\n')
 
