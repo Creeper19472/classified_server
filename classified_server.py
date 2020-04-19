@@ -2,7 +2,7 @@
 
 VERSION = "[1.3.1.083]"
 
-import sys, os, json, socket, shelve, rsa, configparser, time, random, threading, string
+import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
 sys.path.append("./functions/")
 
@@ -46,9 +46,9 @@ class ConnectThread:
                 MakeMsg.Send(conn, "RequestAuthentication")
                 ClientInfo = MakeMsg.Recv(conn, 1024)
                 if ClientInfo["Agreement"] != "Classified_Agreement_0":
-                    print("[" + multicol.Yellow("WARN") + "] ", addr, ": Unable to verify client identity.")
+                    print("[" + multicol.Yellow("WARN") + "] ", addr, _(": Unable to verify client identity."))
                     if ForceAuthentication == "True":
-                        print("[" + multicol.Yellow("WARN") + "] " + "According to the security agreement, this connection has been forcibly terminated.")
+                        print("[" + multicol.Yellow("WARN") + "] " + _("According to the security agreement, this connection has been forcibly terminated."))
                         conn.close()
                         print("[" + multicol.Green("INFO") + "] " + "Client disconnect", addr, ": Forced disconnect")
                         sys.exit()
@@ -58,7 +58,7 @@ class ConnectThread:
                 sys.exit()
         if LoginAuth == 'True':
             MakeMsg.Send(conn, cpkg.PackagesGenerator.LoginRequired())
-            print("[" + multicol.Green("INFO") + "] " + addr[0] + ": 访问阻断 要求登录")
+            print("[" + multicol.Green("INFO") + "] " + addr[0] + _(": 访问阻断 要求登录"))
             AuthInfo = MakeMsg.Recv(conn, 2048)
             try:
                 if AuthInfo['Code'] == '11':
@@ -68,17 +68,17 @@ class ConnectThread:
                                 with shelve.open('./files/access.db') as fac:
                                     canaccess = fac[AuthInfo['Account']]
                                 MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('Login', 'success'))
-                                print("[" + multicol.Green("INFO") + "] " + "用户 %s 秘钥正确 准许登录" % AuthInfo['Account'])
+                                print("[" + multicol.Green("INFO") + "] " + _("用户 %s 秘钥正确 准许登录") % AuthInfo['Account'])
                             else:
                                 raise ValueError('Password not match.')
                         except ValueError:
                             MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound('Login Failed'))
-                            print("[" + multicol.Yellow("WARN") + "]" + "用户 %s 秘钥错误 拒绝登录" % AuthInfo['Account'])
+                            print("[" + multicol.Yellow("WARN") + "]" + _("用户 %s 秘钥错误 拒绝登录") % AuthInfo['Account'])
                             conn.close()
                             sys.exit()
             except:
                 MakeMsg.Send(conn, cpkg.PackagesGenerator.InternalServerError())
-                print("[" + multicol.Yellow("WARN") + "] " + "用户 undefined 秘钥错误 拒绝登录") 
+                print("[" + multicol.Yellow("WARN") + "] " + _("用户 undefined 秘钥错误 拒绝登录")) 
                 conn.close()
                 sys.exit()
         else:
@@ -159,15 +159,14 @@ if os.path.exists('_classified_initialized') == False:
     os.chdir('./secure')
     letscrypt.RSA.CreateNewKey(2048)
     os.chdir('../')
-    __import__('shutil')
-    shutil.copyfile('./functions/class/template', './config/config.ini')
-    print('欢迎使用Classified档案管理系统！请选择你要使用的语言：')
-    
+    shutil = __import__('shutil')
+    shutil.copyfile('./functions/class/template/config-sample.ini', './config/config.ini')
+    # print('欢迎使用Classified档案管理系统！请选择你要使用的语言：')
     with open("_classified_initialized", "w") as x:
         x.write('\n')
 
 title()
-print("[" + multicol.Green("INFO") + "] " + "Initializing server configuration...")
+print("[" + multicol.Green("INFO") + "] " + _("Initializing server configuration..."))
 config = configparser.ConfigParser()
 config.read("./config/config.ini")
 
@@ -182,7 +181,7 @@ useraccess = shelve.open('./secure/users/access.db')
 server.bind(svcinfo)
 server.listen(15)
 
-print("[" + multicol.Green("INFO") + "] " + "Verifying plugin information ...")
+print("[" + multicol.Green("INFO") + "] " + _("Verifying plugin information ..."))
 
 if EnablePlugins == True:
     folders = []
@@ -206,10 +205,10 @@ if EnablePlugins == True:
             except BaseException as e:
                 continue
             lists.append(PluginName)
-            print("[" + multicol.Green("INFO") + "] " + "Plug-in activated successfully: " + PluginInfoConfig.get("INFO", "PLUGIN-NAME"))
+            print("[" + multicol.Green("INFO") + "] " + _("Plug-in activated successfully: ") + PluginInfoConfig.get("INFO", "PLUGIN-NAME"))
 
 time2 = time.time() - time1
-print("[" + multicol.Green("INFO") + "] " + ("Done(%ss)!" % time2))
+print("[" + multicol.Green("INFO") + "] " + _("Done(%ss)!") % time2)
 
 with open("./secure/e.pem", "rb") as x:
     ekey = x.read()
@@ -221,7 +220,7 @@ while True:
     if EnablePlugins == True:
         for i in lists:
             exec(i + '.main()')
-    conn, addr = server.accept() #等待链接,多个链接的时候就会出现问题,其实返回了两个值
+    conn, addr = server.accept() # 等待链接,多个链接的时候就会出现问题,其实返回了两个值
     ThreadNewName = "Thread-%s" % random.randint(1,10000)
     NewThread = MainThread(1, ThreadNewName, 1)
     NewThread.start()
