@@ -11,7 +11,12 @@ sys.path.append("./functions/class")
 import colset, letscrypt
 import pkgGenerator as cpkg
 
-es = gettext.translation('cfs_server', localedir='locale', languages=['zh_CN'])
+es = gettext.translation(
+        'cfs_server',
+        localedir = 'locale',
+        languages = ['zh_CN'],
+        fallback = True
+        )
 es.install()
 
 class MakeMsg:
@@ -35,12 +40,6 @@ class MakeMsg_ex:
 
 class ConnectThread:
     def MainThread():
-        for i in lists:
-            sys.path.append(i)
-            try:
-                eval('__import__("' + i + '")')
-            except BaseException as e:
-                continue
         if MakeMsg.Recv(conn, 64) == "Hi":
             MakeMsg.Send(conn, "Hi")
             if MakeMsg.Recv(conn, 64) == "Success":
@@ -60,7 +59,7 @@ class ConnectThread:
                 sys.exit()
         if LoginAuth == 'True':
             MakeMsg.Send(conn, cpkg.PackagesGenerator.LoginRequired())
-            print("[" + multicol.Green("INFO") + "] " + addr[0] + _(": 访问阻断 要求登录"))
+            print("[" + multicol.Green("INFO") + "] " + addr[0] + _(": Login required"))
             AuthInfo = MakeMsg.Recv(conn, 2048)
             try:
                 if AuthInfo['Code'] == '11':
@@ -70,17 +69,17 @@ class ConnectThread:
                                 with shelve.open('./files/access.db') as fac:
                                     canaccess = fac[AuthInfo['Account']]
                                 MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('Login', 'success'))
-                                print("[" + multicol.Green("INFO") + "] " + _("用户 %s 秘钥正确 准许登录") % AuthInfo['Account'])
+                                print("[" + multicol.Green("INFO") + "] " + _("User %s Login success") % AuthInfo['Account'])
                             else:
                                 raise ValueError('Password not match.')
                         except ValueError:
                             MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound('Login Failed'))
-                            print("[" + multicol.Yellow("WARN") + "]" + _("用户 %s 秘钥错误 拒绝登录") % AuthInfo['Account'])
+                            print("[" + multicol.Yellow("WARN") + "]" + _("User %s Failed to login") % AuthInfo['Account'])
                             conn.close()
                             sys.exit()
             except:
                 MakeMsg.Send(conn, cpkg.PackagesGenerator.InternalServerError())
-                print("[" + multicol.Yellow("WARN") + "] " + _("用户 undefined 秘钥错误 拒绝登录")) 
+                print("[" + multicol.Yellow("WARN") + "] " + _("User undefined Failed to login")) 
                 conn.close()
                 sys.exit()
         else:

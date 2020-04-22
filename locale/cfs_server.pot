@@ -1,0 +1,61 @@
+# CLASSIFIED SERVER LANGUAGE TEMPLATE.
+# Copyright (C) 2020 CREEPER TEAM
+# FIRST AUTHOR <creeper19472@crpteam.club>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2020-04-22 21:35+CST\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: classified_server.py:50
+msgid ": Unable to verify client identity."
+msgstr ""
+
+#: classified_server.py:52
+msgid "According to the security agreement, this connection has been forcibly terminated."
+msgstr ""
+
+#: classified_server.py:54
+msgid "Client disconnect %s: Forced disconnect"
+msgstr ""
+
+#: classified_server.py:62
+msgid ": Login required"
+msgstr ""
+
+#: classified_server.py:72
+msgid "User %s Login success"
+msgstr ""
+
+#: classified_server.py:77
+msgid "User %s Failed to login"
+msgstr ""
+
+#: classified_server.py:82
+msgid "User undefined Failed to login"
+msgstr ""
+
+#: classified_server.py:170
+msgid "Initializing server configuration..."
+msgstr ""
+
+#: classified_server.py:185
+msgid "Verifying plugin information ..."
+msgstr ""
+
+#: classified_server.py:209
+msgid "Plug-in activated successfully: "
+msgstr ""
+
+#: classified_server.py:212
+msgid "Done(%ss)!"
+msgstr ""
+
