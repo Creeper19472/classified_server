@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "[1.4.3.013]"
+VERSION = "[1.4.3.104]"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
@@ -11,13 +11,6 @@ sys.path.append("./functions/class")
 import colset, letscrypt
 import pkgGenerator as cpkg
 
-es = gettext.translation(
-        'cfs_server',
-        localedir = 'locale',
-        languages = ['zh_CN'],
-        fallback = True
-        )
-es.install()
 
 class MakeMsg:
     def Recv(conn, Limit):
@@ -162,9 +155,31 @@ if os.path.exists('_classified_initialized') == False:
     os.chdir('../')
     shutil = __import__('shutil')
     shutil.copyfile('./functions/class/template/config-sample.ini', './config/config.ini')
-    # print('欢迎使用Classified档案管理系统！请选择你要使用的语言：')
+    langlist = {
+        '0': 'en_US',
+        '1': 'zh_CN',
+        }
+    print('欢迎使用Classified档案管理系统！请选择你要使用的语言：')
+    print(langlist)
+    try:
+        lang = langlist[input('# ')]
+    except KeyError:
+        print('Value is invaild.')
+        sys.exit()
+    config = configparser.ConfigParser()
+    config.read('./config/config.ini')
+    config.set('SERVER', 'LANGUAGE', lang)
+    config.write(open('./config/config.ini', 'w'))
     with open("_classified_initialized", "w") as x:
         x.write('\n')
+
+es = gettext.translation(
+        'cfs_server',
+        localedir = 'locale',
+        languages = ['zh_CN'],
+        fallback = True
+        )
+es.install()
 
 title()
 print("[" + multicol.Green("INFO") + "] " + _("Initializing server configuration..."))
