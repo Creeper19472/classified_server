@@ -1,11 +1,11 @@
-# CLASSIFIED SERVER LANGUAGE TEMPLATE.
-# Copyright (C) 2020 CREEPER TEAM
-# FIRST AUTHOR <creeper19472@crpteam.club>, 2020.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-04-22 21:35+CST\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2020-04-24 22:30+CST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,47 +15,59 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: classified_server.py:50
-msgid ": Unable to verify client identity."
+#: classified_server.py:40
+msgid "Connection: %s"
 msgstr ""
 
-#: classified_server.py:52
+#: classified_server.py:44
+msgid "%s: Unable to verify client identity."
+msgstr ""
+
+#: classified_server.py:46
 msgid "According to the security agreement, this connection has been forcibly terminated."
 msgstr ""
 
-#: classified_server.py:54
-msgid "Client disconnect %s: Forced disconnect"
+#: classified_server.py:48
+msgid "Client disconnect (%s): Forced disconnect"
 msgstr ""
 
-#: classified_server.py:62
-msgid ": Login required"
+#: classified_server.py:51
+msgid "Exception: %s attempted to connect to the server using an invalid protocol."
 msgstr ""
 
-#: classified_server.py:72
+#: classified_server.py:56
+msgid "%s: Login required"
+msgstr ""
+
+#: classified_server.py:66
 msgid "User %s Login success"
 msgstr ""
 
-#: classified_server.py:77
+#: classified_server.py:71
 msgid "User %s Failed to login"
 msgstr ""
 
-#: classified_server.py:82
+#: classified_server.py:76
 msgid "User undefined Failed to login"
 msgstr ""
 
-#: classified_server.py:170
+#: classified_server.py:89
+msgid "Client disconnect (%s): 221 Goodbye."
+msgstr ""
+
+#: classified_server.py:186
 msgid "Initializing server configuration..."
 msgstr ""
 
-#: classified_server.py:185
+#: classified_server.py:201
 msgid "Verifying plugin information ..."
 msgstr ""
 
-#: classified_server.py:209
+#: classified_server.py:225
 msgid "Plug-in activated successfully: "
 msgstr ""
 
-#: classified_server.py:212
+#: classified_server.py:228
 msgid "Done(%ss)!"
 msgstr ""
 

@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "[1.4.3.104]"
+VERSION = "[1.4.4.077]"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
@@ -10,6 +10,7 @@ sys.path.append("./functions/class")
 
 import colset, letscrypt
 import pkgGenerator as cpkg
+from strFormat import *
 
 
 class MakeMsg:
@@ -36,23 +37,23 @@ class ConnectThread:
         if MakeMsg.Recv(conn, 64) == "Hi":
             MakeMsg.Send(conn, "Hi")
             if MakeMsg.Recv(conn, 64) == "Success":
-                print("[" + multicol.Green("INFO") + "] " + "Connection:", addr)
+                print(StrFormat.INFO() + _("Connection: %s") % addr[0])
                 MakeMsg.Send(conn, "RequestAuthentication")
                 ClientInfo = MakeMsg.Recv(conn, 1024)
                 if ClientInfo["Agreement"] != "Classified_Agreement_0":
-                    print("[" + multicol.Yellow("WARN") + "] ", addr, _(": Unable to verify client identity."))
+                    print(StrFormat.WARN() + _("%s: Unable to verify client identity.") % addr[0])
                     if ForceAuthentication == "True":
-                        print("[" + multicol.Yellow("WARN") + "] " + _("According to the security agreement, this connection has been forcibly terminated."))
+                        print(StrFormat.WARN() + _("According to the security agreement, this connection has been forcibly terminated."))
                         conn.close()
-                        print("[" + multicol.Green("INFO") + "] " + _("Client disconnect %s: Forced disconnect") % addr)
+                        print(StrFormat.INFO() + _("Client disconnect (%s): Forced disconnect") % addr[0])
                         sys.exit()
             else:
-                print("[" + multicol.Yellow("WARN") + "] " + "Exception: ", addr, "attempted to connect to the server using an invalid protocol.")
+                print(StrFormat.WARN() + _("Exception: %s attempted to connect to the server using an invalid protocol.") % addr[0])
                 conn.close()
                 sys.exit()
         if LoginAuth == 'True':
             MakeMsg.Send(conn, cpkg.PackagesGenerator.LoginRequired())
-            print("[" + multicol.Green("INFO") + "] " + addr[0] + _(": Login required"))
+            print(StrFormat.INFO() + _("%s: Login required") % addr[0])
             AuthInfo = MakeMsg.Recv(conn, 2048)
             try:
                 if AuthInfo['Code'] == '11':
@@ -62,17 +63,17 @@ class ConnectThread:
                                 with shelve.open('./files/access.db') as fac:
                                     canaccess = fac[AuthInfo['Account']]
                                 MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('Login', 'success'))
-                                print("[" + multicol.Green("INFO") + "] " + _("User %s Login success") % AuthInfo['Account'])
+                                print(StrFormat.INFO() + _("User %s Login success") % AuthInfo['Account'])
                             else:
                                 raise ValueError('Password not match.')
                         except ValueError:
                             MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound('Login Failed'))
-                            print("[" + multicol.Yellow("WARN") + "]" + _("User %s Failed to login") % AuthInfo['Account'])
+                            print(StrFormat.WARN() + _("User %s Failed to login") % AuthInfo['Account'])
                             conn.close()
                             sys.exit()
             except:
                 MakeMsg.Send(conn, cpkg.PackagesGenerator.InternalServerError())
-                print("[" + multicol.Yellow("WARN") + "] " + _("User undefined Failed to login")) 
+                print(StrFormat.WARN() + _("User undefined Failed to login"))
                 conn.close()
                 sys.exit()
         else:
@@ -85,10 +86,10 @@ class ConnectThread:
                 if TempMsg[0] == "disconnect":
                     MakeMsg.Send(conn, "disconnect")
                     conn.close()
-                    print("[" + multicol.Green("INFO") + "] " + "Client disconnect", addr, ": 221 Goodbye.")
+                    print(StrFormat.INFO() + _("Client disconnect (%s): 221 Goodbye.") % addr[0])
                     break
             except ConnectionResetError:
-                    print("[" + multicol.Yellow("WARN") + "] " + "Client disconnect", addr, ": Client disconnected due to abnormal connection")
+                    print(StrFormat.WARN() + "Client disconnect (%s): Client disconnected due to abnormal connection" % addr[0])
                     conn.close()
                     break
             except json.decoder.JSONDecodeError:
@@ -140,8 +141,8 @@ time1 = time.time()
 def title():
     print(multicol.Yellow("______________                    _________________     _________"))
     print(multicol.Yellow("__  ____/__  /_____ _________________(_)__  __/__(_)__________  /"))
-    print(multicol.Yellow("_  /    __  /_  __ `/_  ___/_  ___/_  /__  /_ __  /_  _ \  __  / "))
-    print(multicol.Yellow("/ /___  _  / / /_/ /_(__  )_(__  )_  / _  __/ _  / /  __/ /_/ /  "))
+    print(multicol.Yellow("_  /    __  /_  __ `/_  ___/_  ___/_  /__  /_ __ /_  _ \  __  / "))
+    print(multicol.Yellow("/ /___  _  / / /_/ /_(__  )_(__  )_  / _  __/ _    / /  __/ /_/ /  "))
     print(multicol.Yellow("\____/  /_/  \__,_/ /____/ /____/ /_/  /_/    /_/  \___/\__,_/   "))
     print(multicol.Yellow('Classified Server'), VERSION)
     print()
@@ -149,7 +150,7 @@ def title():
 multicol = colset.Colset()
 
 if os.path.exists('_classified_initialized') == False:
-    print("[" + multicol.Green("INFO") + "] " + 'The system is initializing, please wait ...')
+    print(StrFormat.INFO() + 'The system is initializing, please wait ...')
     os.chdir('./secure')
     letscrypt.RSA.CreateNewKey(2048)
     os.chdir('../')
@@ -159,7 +160,7 @@ if os.path.exists('_classified_initialized') == False:
         '0': 'en_US',
         '1': 'zh_CN',
         }
-    print('欢迎使用Classified档案管理系统！请选择你要使用的语言：')
+    print('欢迎使用 Classified 档案管理系统！请选择你要使用的语言：')
     print(langlist)
     try:
         lang = langlist[input('# ')]

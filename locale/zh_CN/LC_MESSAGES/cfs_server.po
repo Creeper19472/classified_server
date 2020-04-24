@@ -2,63 +2,75 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-22 21:50+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: 1\n"
+"Report-Msgid-Bugs-To: None\n"
+"POT-Creation-Date: 2020-04-24 22:31+0800\n"
+"PO-Revision-Date: 2020-04-23 22:41:00\n"
+"Last-Translator: Creeper19472 <creeper19472@crpteam.club>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: classified_server.py:50
-msgid ": Unable to verify client identity."
-msgstr ""
+#: classified_server.py:40
+msgid "Connection: %s"
+msgstr "连接： %s"
 
-#: classified_server.py:52
+#: classified_server.py:44
+msgid "%s: Unable to verify client identity."
+msgstr "%s：无法验证客户端身份。"
+
+#: classified_server.py:46
 msgid ""
 "According to the security agreement, this connection has been forcibly "
 "terminated."
-msgstr ""
+msgstr "根据安全协议限制，此连接将被强制断开。"
 
-#: classified_server.py:54
-msgid "Client disconnect %s: Forced disconnect"
-msgstr ""
+#: classified_server.py:48
+msgid "Client disconnect (%s): Forced disconnect"
+msgstr "客户端连接断开(%s)：强制断开连接"
 
-#: classified_server.py:62
-msgid ": Login required"
-msgstr ""
+#: classified_server.py:51
+msgid ""
+"Exception: %s attempted to connect to the server using an invalid protocol."
+msgstr "异常： %s 在连接服务器时使用了一个无效的协议。"
 
-#: classified_server.py:72
+#: classified_server.py:56
+msgid "%s: Login required"
+msgstr "%s：要求登录"
+
+#: classified_server.py:66
 msgid "User %s Login success"
-msgstr ""
+msgstr "用户 %s 秘钥正确 准许登录"
 
-#: classified_server.py:77
+#: classified_server.py:71
 msgid "User %s Failed to login"
-msgstr ""
+msgstr "用户 %s 秘钥错误 拒绝登录"
 
-#: classified_server.py:82
+#: classified_server.py:76
 msgid "User undefined Failed to login"
-msgstr ""
+msgstr "用户 undefined 秘钥错误 拒绝登录"
 
-#: classified_server.py:170
+#: classified_server.py:89
+msgid "Client disconnect (%s): 221 Goodbye."
+msgstr "客户端断开连接(%s)：221 Goodbye."
+
+#: classified_server.py:186
 msgid "Initializing server configuration..."
-msgstr ""
+msgstr "正在初始化服务器配置..."
 
-#: classified_server.py:185
+#: classified_server.py:201
 msgid "Verifying plugin information ..."
-msgstr ""
+msgstr "正在验证插件信息..."
 
-#: classified_server.py:209
+#: classified_server.py:225
 msgid "Plug-in activated successfully: "
-msgstr ""
+msgstr "插件激活成功："
 
-#: classified_server.py:212
+#: classified_server.py:228
 msgid "Done(%ss)!"
-msgstr ""
+msgstr "完成(%s 秒)！"
