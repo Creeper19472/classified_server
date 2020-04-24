@@ -2,8 +2,9 @@ Classified Services License
 
 Copyright (c) 2020 Creeper Team
 
-Before using the Classified file management system (Hereinafter referred to as
-"this system"), the following regulations should be followed:
+The Classified archive management system is an open source, free, and everyone can
+contribute project. Before using the Classified file management system (Hereinafter
+referred to as "this system"), the following regulations should be followed:
 
 1. Before using this system, regardless of personal or commercial behavior, you
    must apply to the developer in advance. Unauthorized use behavior we have the
@@ -14,21 +15,25 @@ Before using the Classified file management system (Hereinafter referred to as
    piracy and redistribution of this system are strictly prohibited. We have the
    right to request the infringer to compensate any loss caused by this system.
 
-3. We have the right to deprive a user of the right to use the system at any time
+3. All modules, libraries, sample resources, etc. referenced by the system follow
+   their original distribution license.
+
+4. We have the right to deprive a user of the right to use the system at any time
    without any explanation.
 
-4. If users use the cloud service provided by us, please pay attention to regularly
+5. If users use the cloud service provided by us, please pay attention to regularly
    backup your data to the local and regularly check whether your service is normal.
    WE ARE NOT RESPONESIBLE FOR ANY LOSSES CAUSED BY SUCH NEGLIGENCE. At any time, we
    recommend that users use their own servers for hosting.
 
-5. If the user's right to use the system is cancelled, the data hosted on our cloud
+6. If the user's right to use the system is cancelled, the data hosted on our cloud
    service will be deleted synchronously. We have the right not to provide backup of
    data.
 
-6. If the user has donated before the right to use is cancelled, the decision to 
+7. If the user has donated before the right to use is cancelled, the decision to 
    cancel the right to use will still be executed, but we will provide a copy (if any)
    of the latest data of the cloud service. It may not be the latest, and we are not 
    responsible for data loss caused by its old version.
 
-WE RESERVE THE RIGHT TO CHANGE THE LICENSE AT ANY TIME WITHOUT NOTICE.
+When using the Classified file management system, you have accepted all the terms of
+this agreement. WE RESERVE THE RIGHT TO CHANGE THE LICENSE AT ANY TIME WITHOUT NOTICE.
