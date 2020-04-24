@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "[1.4.4.077]"
+VERSION = "[1.4.4.079]"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
