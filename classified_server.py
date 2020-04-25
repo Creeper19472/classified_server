@@ -147,11 +147,11 @@ server = socket.socket()
 time1 = time.time()
 
 def title():
-    print(multicol.Yellow("______________ _________________ _________"))
-    print(multicol.Yellow("__ ____/__ /_____ _________________(_)__ __/__(_)__________ /"))
-    print(multicol.Yellow("_ / __ /_ __ `/_ ___/_ ___/_ /__ /_ __ /_ _ \ __ / "))
-    print(multicol.Yellow("/ /___ _ / / /_/ /_(__ )_(__ )_ / _ __/ _ / / __/ /_/ / "))
-    print(multicol.Yellow("\____/ /_/ \__,_/ /____/ /____/ /_/ /_/ /_/ \___/\__,_/ ")) 
+    print(multicol.Yellow("______________                    _________________     _________"))
+    print(multicol.Yellow("__  ____/__  /_____ _________________(_)__  __/__(_)__________  /"))
+    print(multicol.Yellow("_  /    __  /_  __ `/_  ___/_  ___/_  /__  /_ __  /_  _ \  __  / "))
+    print(multicol.Yellow("/ /___  _  / / /_/ /_(__  )_(__  )_  / _  __/ _  / /  __/ /_/ /  "))
+    print(multicol.Yellow("\____/  /_/  \__,_/ /____/ /____/ /_/  /_/    /_/  \___/\__,_/   "))
     print(multicol.Yellow('Classified Server'), VERSION)
     print()
 
