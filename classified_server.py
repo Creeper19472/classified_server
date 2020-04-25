@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "[1.4.4.079]"
+VERSION = "[1.4.4.131]"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
@@ -99,17 +99,25 @@ class ConnectThread:
                     if bool(TempMsg[1]) == False:
                         continue
                     if TempMsg[1].find('../') != -1:
-                        raise
-                except BaseException:
+                        raise PermissionError('The client uses the \'../\' command')
+                except (IsADirectoryError, FileNotFoundError):
                     MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound('File Not Found.'))
+                    continue
+                except PermissionError:
+                    MakeMsg.Send(conn, cpkg.PackagesGenerator.InternalServerError('This request has not respose because you\'re using a hack command.'))
+                    print(StrFormat.WARN() + _('%s: using the \'../\' command.') % addr[0])
+                    continue
+                except:
+                    MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound())
                     continue
                 try:
                     with open('./files/'+TempMsg[1], 'r') as GetFile:
                         try:
-                            if fileaccessdb[TempMsg[1]] <= canaccess:
-                                MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('FileResult', GetFile.read()))
-                            else:
-                                MakeMsg.Send(conn, cpkg.PackagesGenerator.Forbidden('You don\'t have access to read this file.'))
+                            with shelve.open('./secure/users/access.db') as uadb:
+                                if uadb[TempMsg[1]] <= canaccess:
+                                    MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('FileResult', GetFile.read()))
+                                else:
+                                    MakeMsg.Send(conn, cpkg.PackagesGenerator.Forbidden('You don\'t have access to read this file.'))
                         except:
                             MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('FileResult', GetFile.read()))
                 except FileNotFoundError:
@@ -139,11 +147,11 @@ server = socket.socket()
 time1 = time.time()
 
 def title():
-    print(multicol.Yellow("______________                    _________________     _________"))
-    print(multicol.Yellow("__  ____/__  /_____ _________________(_)__  __/__(_)__________  /"))
-    print(multicol.Yellow("_  /    __  /_  __ `/_  ___/_  ___/_  /__  /_ __ /_  _ \  __  / "))
-    print(multicol.Yellow("/ /___  _  / / /_/ /_(__  )_(__  )_  / _  __/ _    / /  __/ /_/ /  "))
-    print(multicol.Yellow("\____/  /_/  \__,_/ /____/ /____/ /_/  /_/    /_/  \___/\__,_/   "))
+    print(multicol.Yellow("______________ _________________ _________"))
+    print(multicol.Yellow("__ ____/__ /_____ _________________(_)__ __/__(_)__________ /"))
+    print(multicol.Yellow("_ / __ /_ __ `/_ ___/_ ___/_ /__ /_ __ /_ _ \ __ / "))
+    print(multicol.Yellow("/ /___ _ / / /_/ /_(__ )_(__ )_ / _ __/ _ / / __/ /_/ / "))
+    print(multicol.Yellow("\____/ /_/ \__,_/ /____/ /____/ /_/ /_/ /_/ \___/\__,_/ ")) 
     print(multicol.Yellow('Classified Server'), VERSION)
     print()
 
@@ -191,9 +199,6 @@ svcinfo = (config.get("SERVER", "ServerHost"), int(config.get("SERVER", "ServerP
 ForceAuthentication = config.get("AUTHENTICATION", "ForceAuthentication")
 LoginAuth = config.get("AUTHENTICATION", "LoginAuthentication")
 EnablePlugins = bool(config.get("PLUGIN", "EnablePlugins"))
-
-fileaccessdb = shelve.open('./files/access.db')
-useraccess = shelve.open('./secure/users/access.db')
 
 server.bind(svcinfo)
 server.listen(15)

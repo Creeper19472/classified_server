@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 class PackagesGenerator:
-    def FileNotFound(Msg):
+    def FileNotFound(Msg='File Not Found.'):
         Package = {
             'Code' : '404',
             'Message' : Msg
@@ -15,11 +15,11 @@ class PackagesGenerator:
             }
         return Package
     
-    def InternalServerError(Msg=None):
+    def InternalServerError(Msg='Sorry, this request is invaild!!'):
         Package = {
             'Code' : '500',
             'Title' : 'Internal Server Error',
-            'Message' : 'Sorry, this request is invaild!!'
+            'Message' : Msg
             }
         return Package
 
