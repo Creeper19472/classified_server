@@ -10,16 +10,18 @@
 
 import sys
 
-lists = ['Plug1', 'Plug2']
-
-
-def Plug1():
-    return 'aa'
-
-def Plug2():
-    return 'bb'
+def init():
+    print('Haha! This is an Example.')
+    print('Our plugins is not powerful, but we\'re makeing it better.')
 
 def main():
-    for i in lists:
-        Replace = i.replace('\'', '')
-        exec(Replace + '()')
+    pass
+
+def connect():
+    pass
+
+def disconnect():
+    pass
+
+def GetFile():
+    pass

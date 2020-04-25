@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "[1.4.4.131]"
+VERSION = "[1.4.5.010]"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
@@ -38,6 +38,9 @@ class ConnectThread:
             MakeMsg.Send(conn, "Hi")
             if MakeMsg.Recv(conn, 64) == "Success":
                 print(StrFormat.INFO() + _("Connection: %s") % addr[0])
+                if EnablePlugins is True:
+                    for i in lists:
+                        exec(i + '.connect()')
                 MakeMsg.Send(conn, "RequestAuthentication")
                 ClientInfo = MakeMsg.Recv(conn, 1024)
                 if ClientInfo["Agreement"] != "Classified_Agreement_0":
@@ -84,6 +87,9 @@ class ConnectThread:
                 TempMsg = MakeMsg.Recv(conn, 1024)
                 TempMsg = TempMsg.split()
                 if TempMsg[0] == "disconnect":
+                    if EnablePlugins is True:
+                        for i in lists:
+                            exec(i + '.disconnect()')
                     MakeMsg.Send(conn, "disconnect")
                     conn.close()
                     print(StrFormat.INFO() + _("Client disconnect (%s): 221 Goodbye.") % addr[0])
@@ -115,6 +121,9 @@ class ConnectThread:
                         try:
                             with shelve.open('./secure/users/access.db') as uadb:
                                 if uadb[TempMsg[1]] <= canaccess:
+                                    if EnablePlugins is True:
+                                        for i in lists:
+                                            exec(i + '.GetFile()')
                                     MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('FileResult', GetFile.read()))
                                 else:
                                     MakeMsg.Send(conn, cpkg.PackagesGenerator.Forbidden('You don\'t have access to read this file.'))
@@ -129,6 +138,9 @@ class ConnectThread:
 
             if TempMsg[0] == "VERSION":
                MakeMsg.Send(conn, VERSION)
+
+            if TempMsg[0] == "Meta":
+                pass
 
 
 class MainThread(threading.Thread):
@@ -205,7 +217,7 @@ server.listen(15)
 
 print("[" + multicol.Green("INFO") + "] " + _("Verifying plugin information ..."))
 
-if EnablePlugins == True:
+if EnablePlugins is True:
     folders = []
     for root,dirs,files in os.walk(r"./functions/plugins/"):
         for dir in dirs:
@@ -224,11 +236,11 @@ if EnablePlugins == True:
                 PluginName = PluginInfoConfig.get("INFO", "PLUGIN-NAME")
                 PluginNameReplace = PluginName.replace('\'', '')
                 exec('import ' + PluginNameReplace)
-            except BaseException as e:
+                exec(PluginNameReplace + '.init()')
+            except:
                 continue
             lists.append(PluginName)
             print("[" + multicol.Green("INFO") + "] " + _("Plug-in activated successfully: ") + PluginInfoConfig.get("INFO", "PLUGIN-NAME"))
-
 time2 = time.time() - time1
 print("[" + multicol.Green("INFO") + "] " + _("Done(%ss)!") % time2)
 
