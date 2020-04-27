@@ -197,7 +197,7 @@ if os.path.exists('_classified_initialized') == False:
 es = gettext.translation(
         'cfs_server',
         localedir = 'locale',
-        languages = ['zh_CN'],
+        languages = [lang],
         fallback = True
         )
 es.install()
@@ -208,6 +208,7 @@ config = configparser.ConfigParser()
 config.read("./config/config.ini")
 
 svcinfo = (config.get("SERVER", "ServerHost"), int(config.get("SERVER", "ServerPort")))
+lang = config.get("SERVER", "LANGUAGE")
 ForceAuthentication = config.get("AUTHENTICATION", "ForceAuthentication")
 LoginAuth = config.get("AUTHENTICATION", "LoginAuthentication")
 EnablePlugins = bool(config.get("PLUGIN", "EnablePlugins"))
