@@ -5,14 +5,15 @@ class Blocked:
         if text.find('<blocked>') == -1:
             return text
         blockpos = []
+        blockends = 0
         while True:
-            blockstarts = text.find('<blocked>', blockstarts) + 8
+            blockstarts = text.find('<blocked>')
             if blockstarts == -1:
                 break
-            blockends = text.find('</blocked>', blockstarts) + 9
+            blockends = text.find('</blocked>', blockstarts)
             if blockends == -1:
                 raise SyntaxError('Missing \'</blockends>\'')
-            blockpos.append((blockstarts, blockends))
-        return blockpos
-        
-print(Blocked.ReplaceBlock('<blocked>', 1))
+            else:
+                blockends = blockends + 10
+            text = text.replace(text[blockstarts:blockends], '[数据删除]')
+        return text
