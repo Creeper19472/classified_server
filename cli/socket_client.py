@@ -45,6 +45,9 @@ class ClientConnection():
         TempMsg = MakeMsg.Recv(512)
         print(TempMsg)
         try:
+            if TempMsg['Code'] == '310':
+                fkey = TempMsg['fkey']
+                MakeMsg.Send()
             if TempMsg['Code'] == '10':
                 print('The server needs an account and a password.')
                 account = input('Account: ')

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
  
-import sys, os, gettext
+import sys, gettext, shutil, 
 
 '''
 Classified Setup Wizard
@@ -15,11 +15,11 @@ import colset
 
 multicol = colset.Colset()
 
-def BrandNew():
-    print(_(' database...'))
-    
-
-
+class setup:
+    def brandnew():
+        print(_('Copying files...'))
+        shutil.copyfile('./class/template/config-sample.ini', '../config/config.ini')
+        print(_(''))
 
 print('Welcome to the Classified Setup Wizard!')
 
@@ -58,5 +58,11 @@ print(_('   If select this, we\'ll check updates and upgrade it.\
 print('\n')
 select = input(multicol.Green(_('Select: ')))
 
-# Step 2-1: Brand-new Installation
-
+# Step 2: Setup
+if select == '1':
+    setup.brandnew()
+elif select == '2':
+    setup.update()
+else:
+    print(multicol.Red(_('ERROR: Invaild parameters!')))
+    sys.exit()

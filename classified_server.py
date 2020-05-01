@@ -1,35 +1,36 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "[1.4.5.010]"
+VERSION = "[1.4.6.171]"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
 sys.path.append("./functions/")
-
-sys.path.append("./functions/class")
+sys.path.append("./functions/class/")
+sys.path.append("./functions/class/common/")
 
 import colset, letscrypt
 import pkgGenerator as cpkg
 from strFormat import *
-
+from fileDetect import *
 
 class MakeMsg:
-    def Recv(conn, Limit):
-        Msg = conn.recv(Limit)
-        return json.loads(Msg.decode())
+    def Recv(conn, limit, key=None):
+        if key == None:
+            Msg = conn.recv(limit)
+            return json.loads(Msg.decode())
+        try:
+            recv = json.loads(conn.recv(limit).decode())
+            return letscrypt.RSA.Decrypt(recv, key)
+        except:
+            try:
+                return letscrypt.BLOWFISH.Decrypt(recv, key)
+            except:
+                raise ValueError('Key is invaild')
+
     
     def Send(conn, Msg):
-        byte = bytes(json.dumps(Msg), encoding='UTF-8')
+        byte = bytes(json.dumps(str(Msg)), encoding='UTF-8')
         conn.send(byte)
-
-
-class MakeMsg_ex:
-    def Recv(conn, Limit):
-        Msg = conn.recv(Limit)
-        return Msg.decode()
-
-    def Send(conn, Msg):
-        conn.send(Msg)
 
 
 class ConnectThread:
@@ -54,6 +55,13 @@ class ConnectThread:
                 print(StrFormat.WARN() + _("Exception: %s attempted to connect to the server using an invalid protocol.") % addr[0])
                 conn.close()
                 sys.exit()
+
+        MakeMsg.Send(conn, cpkg.PackagesGenerator.Encrypt(fkey))
+        '''EncryptMsg = MakeMsg.Recv(conn, 2048, ekey)
+        if EncryptMsg['Code'] == '200':
+            salt = EncryptMsg['salt']
+            MakeMsg.Send(conn, cpkg.PackagesGenerator.Message(None, None), fkey)'''
+
         if LoginAuth == 'True':
             MakeMsg.Send(conn, cpkg.PackagesGenerator.LoginRequired())
             print(StrFormat.INFO() + _("%s: Login required") % addr[0])
@@ -102,8 +110,6 @@ class ConnectThread:
                     print('FuckU')
             if TempMsg[0] == "GET":
                 try:
-                    if bool(TempMsg[1]) == False:
-                        continue
                     if TempMsg[1].find('../') != -1:
                         raise PermissionError('The client uses the \'../\' command')
                 except (IsADirectoryError, FileNotFoundError):
@@ -124,6 +130,7 @@ class ConnectThread:
                                     if EnablePlugins is True:
                                         for i in lists:
                                             exec(i + '.GetFile()')
+                                            Result = Blocked.ReplaceBlock(GetFile.read(), canaccess)
                                     MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('FileResult', GetFile.read()))
                                 else:
                                     MakeMsg.Send(conn, cpkg.PackagesGenerator.Forbidden('You don\'t have access to read this file.'))
@@ -194,6 +201,10 @@ if os.path.exists('_classified_initialized') == False:
     with open("_classified_initialized", "w") as x:
         x.write('\n')
 
+config = configparser.ConfigParser()
+config.read('./config/config.ini')
+
+lang = config.get("SERVER", "LANGUAGE")
 es = gettext.translation(
         'cfs_server',
         localedir = 'locale',
@@ -204,11 +215,8 @@ es.install()
 
 title()
 print("[" + multicol.Green("INFO") + "] " + _("Initializing server configuration..."))
-config = configparser.ConfigParser()
-config.read("./config/config.ini")
 
 svcinfo = (config.get("SERVER", "ServerHost"), int(config.get("SERVER", "ServerPort")))
-lang = config.get("SERVER", "LANGUAGE")
 ForceAuthentication = config.get("AUTHENTICATION", "ForceAuthentication")
 LoginAuth = config.get("AUTHENTICATION", "LoginAuthentication")
 EnablePlugins = bool(config.get("PLUGIN", "EnablePlugins"))
@@ -247,6 +255,8 @@ print("[" + multicol.Green("INFO") + "] " + _("Done(%ss)!") % time2)
 
 with open("./secure/e.pem", "rb") as x:
     ekey = x.read()
+with open("./secure/f.pem", "rb") as x:
+    fkey = x.read()
 
 # salt = ''.join(random.sample(string.ascii_letters + string.digits, 8))
 # print(letscrypt.BLOWFISH.Encrypt('aaaaaaa', salt))

@@ -12,8 +12,11 @@ class Blocked:
                 break
             blockends = text.find('</blocked>', blockstarts)
             if blockends == -1:
-                raise SyntaxError('Missing \'</blockends>\'')
+                raise SyntaxError('Missing \'</blocked>\'')
             else:
                 blockends = blockends + 10
-            text = text.replace(text[blockstarts:blockends], '[数据删除]')
+            if level >= 5:
+                text = text.replace(text[blockstarts:blockends], text[blockstarts+9:blockends-10])
+            else:
+                text = text.replace(text[blockstarts:blockends], '[数据删除]')
         return text
