@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
  
-import sys, gettext, shutil, 
+import sys, gettext, shutil 
 
 '''
 Classified Setup Wizard

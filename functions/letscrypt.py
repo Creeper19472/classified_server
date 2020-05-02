@@ -21,7 +21,7 @@ class RSA():
     def Encrypt(obj, ekey):
         e = rsa.PrivateKey.load_pkcs1(ekey)
         obj = bytes(json.dumps(obj), encoding='UTF-8')
-        cipher_text = rsa.encrypt(obj, f)
+        cipher_text = rsa.encrypt(obj, e)
         return cipher_text
 
     def Decrypt(obj, ekey):
