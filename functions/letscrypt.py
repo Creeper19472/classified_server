@@ -36,7 +36,7 @@ class BLOWFISH():
         key = key.encode("utf-8")
         l = len(code)
         if l % 8 != 0 :
-            code = code + ' ' * (8 - (l %8))  # Blowfish底层决定了字符串长度必须8的整数倍，所补位空格也可以根据自己需要补位其他字符
+            code = code + ' ' * (8 - (l % 8))  # Blowfish底层决定了字符串长度必须8的整数倍，所补位空格也可以根据自己需要补位其他字符
         code = code.encode('utf-8')
         cl = Blowfish.new(key, Blowfish.MODE_ECB)
         encode = cl.encrypt(code)

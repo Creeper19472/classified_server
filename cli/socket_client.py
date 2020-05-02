@@ -42,11 +42,11 @@ class ClientConnection():
                 "ClientVer": "0"
             }
             MakeMsg.Send(ClientInfo)
-        TempMsg = MakeMsg.Recv(512)
+        TempMsg = MakeMsg.Recv(4096)
         print(TempMsg)
         try:
             if TempMsg['Code'] == '310':
-                fkey = TempMsg['fkey']
+                fkey = json.loads(TempMsg['fkey'])
                 MakeMsg.Send()
             if TempMsg['Code'] == '10':
                 print('The server needs an account and a password.')

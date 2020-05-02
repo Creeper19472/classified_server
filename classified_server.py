@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "[1.4.6.171]"
+VERSION = "1.4.6.231"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
@@ -29,7 +29,7 @@ class MakeMsg:
 
     
     def Send(conn, Msg):
-        byte = bytes(json.dumps(str(Msg)), encoding='UTF-8')
+        byte = bytes(json.dumps(Msg), encoding='UTF-8')
         conn.send(byte)
 
 
@@ -56,8 +56,8 @@ class ConnectThread:
                 conn.close()
                 sys.exit()
 
-        MakeMsg.Send(conn, cpkg.PackagesGenerator.Encrypt(fkey))
-        '''EncryptMsg = MakeMsg.Recv(conn, 2048, ekey)
+        '''MakeMsg.Send(conn, cpkg.PackagesGenerator.Encrypt(fkey))
+        EncryptMsg = MakeMsg.Recv(conn, 2048, ekey)
         if EncryptMsg['Code'] == '200':
             salt = EncryptMsg['salt']
             MakeMsg.Send(conn, cpkg.PackagesGenerator.Message(None, None), fkey)'''
@@ -130,12 +130,13 @@ class ConnectThread:
                                     if EnablePlugins is True:
                                         for i in lists:
                                             exec(i + '.GetFile()')
-                                            Result = Blocked.ReplaceBlock(GetFile.read(), canaccess)
-                                    MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('FileResult', GetFile.read()))
+                                    Result = Blocked.ReplaceBlock(GetFile.read(), canaccess)
+                                    MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('FileResult', Result))
                                 else:
                                     MakeMsg.Send(conn, cpkg.PackagesGenerator.Forbidden('You don\'t have access to read this file.'))
                         except:
-                            MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('FileResult', GetFile.read()))
+                            Result = Blocked.ReplaceBlock(GetFile.read(), 5)
+                            MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('FileResult', Result))
                 except FileNotFoundError:
                     MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound('File Not Found.'))
                     continue
@@ -171,7 +172,7 @@ def title():
     print(multicol.Yellow("_  /    __  /_  __ `/_  ___/_  ___/_  /__  /_ __  /_  _ \  __  / "))
     print(multicol.Yellow("/ /___  _  / / /_/ /_(__  )_(__  )_  / _  __/ _  / /  __/ /_/ /  "))
     print(multicol.Yellow("\____/  /_/  \__,_/ /____/ /____/ /_/  /_/    /_/  \___/\__,_/   "))
-    print(multicol.Yellow('Classified Server'), VERSION)
+    print(multicol.Yellow('Classified Server'), '[%s]' % VERSION)
     print()
 
 multicol = colset.Colset()
