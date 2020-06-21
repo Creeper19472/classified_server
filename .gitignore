@@ -124,6 +124,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Classified Initialization File
+# Custom
 _classified_initialized
-secure/*.pem
