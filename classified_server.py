@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "1.4.6.231"
+VERSION = "1.4.7.539"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
@@ -177,6 +177,9 @@ def title():
 
 multicol = colset.Colset()
 
+title()
+print('Running On: Python %s' % sys.version)
+
 if os.path.exists('_classified_initialized') == False:
     print(StrFormat.INFO() + 'The system is initializing, please wait ...')
     os.chdir('./secure')
@@ -214,8 +217,7 @@ es = gettext.translation(
         )
 es.install()
 
-title()
-print("[" + multicol.Green("INFO") + "] " + _("Initializing server configuration..."))
+print(StrFormat.INFO() + _("Initializing server configuration..."))
 
 svcinfo = (config.get("SERVER", "ServerHost"), int(config.get("SERVER", "ServerPort")))
 ForceAuthentication = config.get("AUTHENTICATION", "ForceAuthentication")
@@ -225,7 +227,7 @@ EnablePlugins = bool(config.get("PLUGIN", "EnablePlugins"))
 server.bind(svcinfo)
 server.listen(15)
 
-print("[" + multicol.Green("INFO") + "] " + _("Verifying plugin information ..."))
+print(StrFormat.INFO() + _("Verifying plugin information ..."))
 
 if EnablePlugins is True:
     folders = []
@@ -250,9 +252,9 @@ if EnablePlugins is True:
             except:
                 continue
             lists.append(PluginName)
-            print("[" + multicol.Green("INFO") + "] " + _("Plug-in activated successfully: ") + PluginInfoConfig.get("INFO", "PLUGIN-NAME"))
+            print(StrFormat.INFO() + _("Plug-in activated successfully: ") + PluginInfoConfig.get("INFO", "PLUGIN-NAME"))
 time2 = time.time() - time1
-print("[" + multicol.Green("INFO") + "] " + _("Done(%ss)!") % time2)
+print(StrFormat.INFO() + _("Done(%ss)!") % time2)
 
 with open("./secure/e.pem", "rb") as x:
     ekey = x.read()

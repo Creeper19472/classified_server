@@ -12,7 +12,7 @@ import sys
 
 def init():
     print('Haha! This is an Example.')
-    print('Our plugins is not powerful, but we\'re makeing it better.')
+    print('Our plugins is not powerful, but we\'re making it better.')
 
 def main():
     pass
