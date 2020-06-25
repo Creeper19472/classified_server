@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "1.4.7.539"
+VERSION = "1.4.7.691"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
@@ -185,7 +185,7 @@ if os.path.exists('_classified_initialized') == False:
     os.chdir('./secure')
     letscrypt.RSA.CreateNewKey(2048)
     os.chdir('../')
-    shutil = __import__('shutil')
+    import shutil
     shutil.copyfile('./functions/class/template/config-sample.ini', './config/config.ini')
     langlist = {
         '0': 'en_US',
