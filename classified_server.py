@@ -79,7 +79,7 @@ class ConnectThread:
                                 raise ValueError('Password not match.')
                         except ValueError:
                             MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound('Login Failed'))
-                            print(StrFormat.WARN() + _("User %s Failed to login") % AuthInfo['Account'])
+                            print(StrFormat.WARN() + _("User %s failed to login") % AuthInfo['Account'])
                             conn.close()
                             sys.exit()
             except:
