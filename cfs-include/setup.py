@@ -9,7 +9,7 @@ A friendly wizard to setup the server. Easy-to-use.
 Don't change the filename.
 '''
 
-sys.path.append('./class')
+sys.path.append('./class/common')
 
 import colset
 

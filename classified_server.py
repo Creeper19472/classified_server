@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
 
-VERSION = "1.4.7.691"
+VERSION = "1.4.7.799"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
-sys.path.append("./functions/")
-sys.path.append("./functions/class/")
-sys.path.append("./functions/class/common/")
+sys.path.append("./cfs-include/")
+sys.path.append("./cfs-include/class/")
+sys.path.append("./cfs-include/class/common/")
 
 import colset, letscrypt
 import pkgGenerator as cpkg
