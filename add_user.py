@@ -1,16 +1,19 @@
 import hashlib
 import sys
-import shelve
+
+sys.path.append('./cfs-include/class/shelveEngine/')
+
+import shelveEngine
 
 Account = input('Account: ')
 Password = input('Password: ')
 AccessLevel = input('Level: ')
 SHA256 = hashlib.sha256(Password.encode()).hexdigest()
 
-with shelve.open('./secure/users/users.db') as db:
-    db[Account] = SHA256
-with shelve.open('./files/access.db') as db2:
-    db2[Account] = AccessLevel
+db = shelveEngine.shelveObj('./cfs-content/db.db')
+db.locate('Users')
+db.set(Account, SHA256)
+db.close()
 print('Done!')
 
 

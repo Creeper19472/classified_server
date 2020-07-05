@@ -7,9 +7,11 @@ import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, 
 sys.path.append("./cfs-include/")
 sys.path.append("./cfs-include/class/")
 sys.path.append("./cfs-include/class/common/")
+sys.path.append("./cfs-include/class/shelveEngine/")
 
 import colset, letscrypt
 import pkgGenerator as cpkg
+import shelveEngine
 from strFormat import *
 from fileDetect import *
 
@@ -62,29 +64,28 @@ class ConnectThread:
             salt = EncryptMsg['salt']
             MakeMsg.Send(conn, cpkg.PackagesGenerator.Message(None, None), fkey)'''
 
+        Account = 'Guest'
         if LoginAuth == 'True':
             MakeMsg.Send(conn, cpkg.PackagesGenerator.LoginRequired())
             print(StrFormat.INFO() + _("%s: Login required") % addr[0])
             AuthInfo = MakeMsg.Recv(conn, 2048)
+            print(AuthInfo)
             try:
                 if AuthInfo['Code'] == '11':
-                    with shelve.open('./secure/users/users.db') as db:
-                        try:
-                            if AuthInfo['Password'] == db[AuthInfo['Account']]:
-                                with shelve.open('./files/access.db') as fac:
-                                    canaccess = fac[AuthInfo['Account']]
-                                MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('Login', 'success'))
-                                print(StrFormat.INFO() + _("User %s Login success") % AuthInfo['Account'])
-                            else:
-                                raise ValueError('Password not match.')
-                        except ValueError:
-                            MakeMsg.Send(conn, cpkg.PackagesGenerator.FileNotFound('Login Failed'))
-                            print(StrFormat.WARN() + _("User %s failed to login") % AuthInfo['Account'])
-                            conn.close()
-                            sys.exit()
+                    if db.IsKeyExist(AuthInfo['Account']) is False:
+                        raise
+                    Account = AuthInfo['Account']
+                    db.search(Account)
+                    print(db.search(AuthInfo['Account']))
+                    if AuthInfo['Password'] == db.search(AuthInfo['Account']):
+                        canaccess = 5
+                        MakeMsg.Send(conn, cpkg.PackagesGenerator.Message('Login', 'success'))
+                        print(StrFormat.INFO() + _("User %s Login success") % Account)
+                    else:
+                        raise ValueError('Password not match.')
             except:
                 MakeMsg.Send(conn, cpkg.PackagesGenerator.InternalServerError())
-                print(StrFormat.WARN() + _("User undefined Failed to login"))
+                print(StrFormat.WARN() + _("User %s Failed to login") % Account)
                 conn.close()
                 sys.exit()
         else:
@@ -218,6 +219,13 @@ es = gettext.translation(
 es.install()
 
 print(StrFormat.INFO() + _("Initializing server configuration..."))
+
+db = shelveEngine.shelveObj('./cfs-content/db.db')
+try:
+    db.locate('Users')
+except:
+    db.createTable('Users')
+    db.locate('Users')
 
 svcinfo = (config.get("SERVER", "ServerHost"), int(config.get("SERVER", "ServerPort")))
 ForceAuthentication = config.get("AUTHENTICATION", "ForceAuthentication")
