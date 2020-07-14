@@ -2,3 +2,4 @@ pycryptodome
 configparser
 rsa
 colorama
+pysnooper
