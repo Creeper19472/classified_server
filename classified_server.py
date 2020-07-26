@@ -4,9 +4,9 @@ VERSION = "1.4.7.691"
 
 import sys, os, json, socket, shelve, rsa, configparser, gettext, time, random, threading, string
 
-sys.path.append("./functions/")
-sys.path.append("./functions/class/")
-sys.path.append("./functions/class/common/")
+sys.path.append("./cfs-include/")
+sys.path.append("./cfs-include/class/")
+sys.path.append("./cfs-include/class/common/")
 
 import colset, letscrypt
 import pkgGenerator as cpkg
@@ -186,12 +186,12 @@ if os.path.exists('_classified_initialized') == False:
     letscrypt.RSA.CreateNewKey(2048)
     os.chdir('../')
     import shutil
-    shutil.copyfile('./functions/class/template/config-sample.ini', './config/config.ini')
+    shutil.copyfile('./cfs-include/class/template/config-sample.ini', './config/config.ini')
     langlist = {
         '0': 'en_US',
         '1': 'zh_CN',
         }
-    print('欢迎使用 Classified 档案管理系统！请选择你要使用的语言：')
+    print('Please choose a language:')
     print(langlist)
     try:
         lang = langlist[input('# ')]
@@ -231,7 +231,7 @@ print(StrFormat.INFO() + _("Verifying plugin information ..."))
 
 if EnablePlugins is True:
     folders = []
-    for root,dirs,files in os.walk(r"./functions/plugins/"):
+    for root,dirs,files in os.walk(r"./cfs-include/plugins/"):
         for dir in dirs:
             folders.append(os.path.join(root,dir))
     lists = []
